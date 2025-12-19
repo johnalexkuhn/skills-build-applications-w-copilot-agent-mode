@@ -1,16 +1,20 @@
 from django.core.management.base import BaseCommand
+
 from octofit_tracker.models import User, Team, Activity, Leaderboard, Workout
+from django.conf import settings
+from django.db import connection
 
 class Command(BaseCommand):
     help = 'Populate the octofit_db database with test data'
 
     def handle(self, *args, **options):
-        # Clear existing data
-        User.objects.all().delete()
-        Team.objects.all().delete()
-        Activity.objects.all().delete()
-        Leaderboard.objects.all().delete()
-        Workout.objects.all().delete()
+        # Clear existing data using raw MongoDB collection deletion
+        db = connection.cursor().db_conn
+        db['activity'].delete_many({})
+        db['workout'].delete_many({})
+        db['leaderboard'].delete_many({})
+        db['user'].delete_many({})
+        db['team'].delete_many({})
 
         # Create Teams
         marvel = Team.objects.create(name="Marvel")
