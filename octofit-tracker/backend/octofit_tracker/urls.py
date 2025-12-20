@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
 
+# CODESPACE_NAME = os.environ.get('CODESPACE_NAME')
 
 router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
